@@ -32,8 +32,13 @@ class OwnPersonView(viewsets.GenericViewSet,mixins.ListModelMixin):
         user=self.request.user
         return Person.objects.filter(user=user)
 
-class LogInView(APIView):
+class LogOutView(APIView):
+    permission_classes = (IsAuthenticated,)
 
-    def post(self,request):
-        pass
+    def get(self,request):
+        token_obj=Token.objects.get(user=request.user)
+        token_obj.delete()
+        return Response({'error':False,'message':'Logged out successfully!'})
+
+
 
