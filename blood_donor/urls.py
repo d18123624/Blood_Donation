@@ -20,4 +20,5 @@ from django.conf.urls import url,include
 urlpatterns = [
     url('^admin/', admin.site.urls),
     url(r'^person/',include('person.urls')),
+    url(r'^donation_requests/',include('donation_requests.urls')),
 ]
