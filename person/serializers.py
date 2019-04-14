@@ -65,7 +65,7 @@ class PersonCreateSerializer(Serializer):
     def create(self, validated_data):
         user_fields={'username','password','email'}
         user_obj_args={k:v for k,v in validated_data.items() if k in user_fields}
-        user=User(**user_obj_args)
+        user=User.objects.create_user(**user_obj_args)
         user.save()
         person_obj_args={k:v for k,v in validated_data.items() if k not in user_fields}
         person_obj=Person(user=user,**person_obj_args)
