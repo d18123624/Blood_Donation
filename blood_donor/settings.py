@@ -165,6 +165,9 @@ LOGGING = {
             'class': 'logging.handlers.WatchedFileHandler',
             'filename': './blood_donor.log'
         },
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
     },
     'loggers': {
         # Again, default Django configuration to email unhandled exceptions
@@ -175,15 +178,17 @@ LOGGING = {
         },
         # Might as well log any errors anywhere else in Django
         'django': {
-            'handlers': ['logfile'],
-            'level': 'ERROR',
+            'handlers': ['logfile','console'],
+            'level': 'INFO',
             'propagate': False,
         },
-        # Your own app - this assumes all your logger names start with "myapp."
+        # Your own app - this assumes all your logger names start with "blood_donor."
         'blood_donor': {
             'handlers': ['logfile'],
             'level': 'WARNING', # Or maybe INFO or DEBUG
             'propagate': False
         },
+
+
     },
 }
