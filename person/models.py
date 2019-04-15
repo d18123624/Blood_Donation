@@ -13,7 +13,7 @@ class Person(models.Model):
         ('F', 'Female'),
         ('O', 'Others')
     ),blank=False,null=False)
-    blood_group=models.CharField(max_length=2,choices=(
+    blood_group=models.CharField(max_length=3,choices=(
         ('O+','O Positive'),
         ('O-','O Negative'),
         ('A+','A Positive'),

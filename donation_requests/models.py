@@ -9,7 +9,7 @@ class Search(models.Model):
     search_long = models.DecimalField(max_digits=22, decimal_places=16, blank=False, null=False)
     search_max_distance_metres=models.DecimalField(max_digits=8,decimal_places=0,blank=False,null=False)
     no_of_matches=models.IntegerField(null=False,blank=False)
-    blood_group_patient = models.CharField(max_length=2, choices=(
+    blood_group_patient = models.CharField(max_length=3, choices=(
         ('O+', 'O Positive'),
         ('O-', 'O Negative'),
         ('A+', 'A Positive'),

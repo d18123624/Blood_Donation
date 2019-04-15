@@ -43,7 +43,11 @@ class SearchModelViewSet(viewsets.GenericViewSet,mixins.CreateModelMixin):
                 query_filter=Q(blood_group=blood_type)
             else:
                 query_filter=query_filter|Q(blood_group=blood_type)
-        destination_points_df=pd.DataFrame.from_records(Person.objects.filter(query_filter,currently_eligible_for_donation=True).values('id','address_lat','address_long'))
+                if search_obj.search_person:
+                    exclude_kwargs={'id':search_obj.search_person.id}
+                else:
+                    exclude_kwargs={}
+        destination_points_df=pd.DataFrame.from_records(Person.objects.filter(query_filter,currently_eligible_for_donation=True).exclude(**exclude_kwargs).values('id','address_lat','address_long'))
         #destination_points_df
         #criteria_distance=
         maps_url='https://maps.googleapis.com/maps/api/distancematrix/json'
