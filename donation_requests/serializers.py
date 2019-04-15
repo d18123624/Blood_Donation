@@ -15,6 +15,7 @@ class SearchMatchesLoggedInSerializer(serializers.ModelSerializer):
         exclude=('search_match',)
         depth=1
 
+
 class SearchMatchesNotLoggedInSerializer(serializers.ModelSerializer):
     latitude=serializers.ReadOnlyField(source="match_person.address_lat")
     longitude = serializers.ReadOnlyField(source="match_person.address_long")
@@ -33,6 +34,11 @@ class SearchSerializer(serializers.ModelSerializer):
         #TODO: In the front end, prefill this with the patient's own blood group and then allow him/her to change if needed
         read_only_fields=('search_person','no_of_matches','person_matches',)
         depth=1
+
+    def validate_search_max_distance_metres(self,val):
+        if val<0:
+            raise serializers.ValidationError("This should be positive")
+        return val
 
     def get_person_matches(self,obj):
         user=self.context['request'].user
