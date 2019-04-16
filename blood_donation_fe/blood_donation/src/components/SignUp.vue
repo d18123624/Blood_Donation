@@ -120,7 +120,7 @@
           </div>
           <div class="col s12 valign-wrapper zero-padding">
             <div class="input-field col s4 m4 l5">
-              <input id="latitude" type="number" v-model="location.lat" class="active">
+              <input id="latitude" type="number" step="any" v-model="location.lat" class="active">
               <label for="latitude">Latitude</label>
               <span
                 v-if="laterror != ''"
@@ -128,7 +128,7 @@
               >{{ laterror }}</span>
             </div>
             <div class="input-field col s4 m4 l5">
-              <input id="longitude" type="number" v-model="location.lng" class="active">
+              <input id="longitude" type="number" step="any" v-model="location.lng" class="active">
               <label for="longitude">Longitude</label>
               <span
                 v-if="lngerror != ''"
@@ -156,7 +156,7 @@
             <a
               v-on:click="signup"
               class="right white-text waves-effect btn-flat teal no-uppercase font-size-small form-btn"
-            >Next</a>
+            >Signup</a>
           </div>
         </div>
       </div>

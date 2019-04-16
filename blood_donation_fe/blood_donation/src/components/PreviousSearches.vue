@@ -5,7 +5,7 @@
         <div v-if="loading" class="progress zero-margin zero-padding preloader-wrapper">
           <div class="indeterminate"></div>
         </div>
-        <span class="font-size-large">Previous Searches</span>
+        <span class="font-size-large">Previous Searches ({{ previousSearchCount }} searches)</span>
       </div>
     </div>
     <div class="row previous-searches-height" v-if="previousSearches.length != 0">
@@ -19,7 +19,7 @@
     </div>
     <div class="row" v-if="searchResults.length != 0">
       <div class="row center">
-        <span class="font-size-large">Search Results</span>
+        <span class="font-size-large">Search Results ({{ searchCount }} results)</span>
       </div>
       <SearchResult v-for="result in searchResults" :key="result.id" :result="result"/>
     </div>
@@ -42,7 +42,9 @@ export default {
     return {
       loading: false,
       previousSearches: [],
-      searchResults: []
+      previousSearchCount: 0,
+      searchResults: [],
+      searchCount: 0
     };
   },
   components: {
@@ -51,15 +53,23 @@ export default {
   },
   methods: {
     showSearchResults: function(index) {
-      console.log("Index:\n");
-      console.log(index);
       this.searchResults = this.previousSearches[index].person_matches;
+      this.searchResults.sort(function(a, b) {
+        return (
+          parseFloat(a.distance_in_metres) - parseFloat(b.distance_in_metres)
+        );
+      });
+      this.searchResults = this.searchResults.slice(0, 10);
+      this.searchCount = this.previousSearches[
+        index
+      ].no_of_matches;
     }
   },
   mounted() {
     this.loading = true;
     this.$store.dispatch("getPreviousSearches").then(response => {
       this.previousSearches = response;
+      this.previousSearchCount = response.length;
       this.loading = false;
     });
     M.AutoInit();

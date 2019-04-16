@@ -5,6 +5,7 @@ const Home = () => import('@/components/Home')
 const SignIn = () => import('@/components/SignIn')
 const SignUp = () => import('@/components/SignUp')
 const Search = () => import('@/components/Search')
+const Location = () => import('@/components/Location')
 const PreviousSearches = () => import('@/components/PreviousSearches')
 const IncomingRequests = () => import('@/components/IncomingRequests')
 
@@ -60,6 +61,14 @@ const router = new Router({
             name: 'IncomingRequests',
             meta: {
                 title: 'Incoming requests'
+            }
+        },
+        {
+            path: '/location/:lat/:lon',
+            component: Location,
+            name: 'Location',
+            meta: {
+                title: 'Location'
             }
         }
     ],

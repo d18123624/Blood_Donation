@@ -89,7 +89,12 @@ export default () => ({
     return response
   },
   async search({ state }, payload) {
-    var response = []
+    var response = {
+      person_matches: [],
+      no_of_matches: 0,
+      error_message: "",
+      error: false
+    }
     var headers = {}
     if (localStorage.getItem('token')) {
       headers = {
@@ -105,9 +110,15 @@ export default () => ({
         headers
       }
     ).then((result) => {
-      response = result.body.person_matches
+      response.person_matches = result.body.person_matches
+      response.no_of_matches = result.body.no_of_matches
+      response.error = false
+      response.error_message = ""
     }).catch(function (error) {
-      response = []
+      response.person_matches = []
+      response.error = true
+      response.no_of_matches = 0
+      response.error_message = error.body.search_max_distance_metres[0];
     })
     return response
   },
@@ -156,7 +167,7 @@ export default () => ({
         'Content-Type': 'application/x-www-form-urlencoded',
         emulateJSON: true,
         headers: {
-          Authorization: 'Token ' + '64466136b534cc310dc7598ed8855dc189638329' //localStorage.getItem('token')
+          Authorization: 'Token ' + localStorage.getItem('token')
         }
       }
     ).then((result) => {

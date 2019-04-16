@@ -32,7 +32,7 @@
             <a
               class="right white-text waves-effect btn-flat teal no-uppercase font-size-small form-btn"
               v-on:click="login"
-            >Next</a>
+            >Login</a>
           </div>
         </div>
       </div>

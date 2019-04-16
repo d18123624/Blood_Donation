@@ -21,8 +21,13 @@
             <span class="font-size-small teal-text">{{ phonenumber }}</span>
           </a>
         </div>
+      </div>
+      <div class="row zero-margin zero-padding">
         <div v-if="where == '0'" class="col s6 zero-margin zero-padding">
           <span class="font-size-small">{{ distance }}</span>
+        </div>
+        <div v-if="email != ''" class="col s6 zero-margin zero-padding">
+          <span class="font-size-small">{{ email }}</span>
         </div>
       </div>
       <div class="row zero-margin zero-padding">
@@ -33,14 +38,14 @@
           <span class="font-size-small truncate">{{ latitude }}</span>
         </div>
       </div>
-      <div
-        class="row zero-margin zero-padding center"
-        v-if="isAuthorizedUserSearching && where == '0'"
-      >
+      <div class="row zero-margin zero-padding center">
         <a
+          v-if="isAuthorizedUserSearching && where == '0'"
           v-on:click="requestForBloodDonation"
           class="waves-effect waves-light btn margin-top-16"
         >Request Blood Donation</a>
+        &nbsp;
+        <a :href="'/location/' + latitudeVal + '/' + longitudeVal" target="_blank" class="waves-effect waves-light btn margin-top-16">See location on map</a>
       </div>
     </div>
   </div>
@@ -52,7 +57,6 @@ export default {
   name: "SearchResult",
   created: function() {
     M.AutoInit();
-    console.log(this.result);
   },
   props: ["result", "where"],
   computed: {
@@ -74,6 +78,17 @@ export default {
         }
       }
     },
+    latitudeVal() {
+      try {
+        return this.result.match_person.address_lat;
+      } catch {
+        if (this.result.latitude) {
+          return this.result.latitude;
+        } else {
+          return this.result.address_lat;
+        }
+      }
+    },
     longitude() {
       try {
         return "Longitude: " + this.result.match_person.address_long;
@@ -82,6 +97,17 @@ export default {
           return "Longitude: " + this.result.longitude;
         } else {
           return "Longitude: " + this.result.address_long;
+        }
+      }
+    },
+    longitudeVal() {
+      try {
+        return this.result.match_person.address_long;
+      } catch {
+        if (this.result.longitude) {
+          return this.result.longitude;
+        } else {
+          return this.result.address_long;
         }
       }
     },
@@ -94,6 +120,17 @@ export default {
       } catch {
         if (this.result.name) {
           return this.result.name;
+        } else {
+          return "";
+        }
+      }
+    },
+    email() {
+      try {
+        return this.result.match_person.email;
+      } catch {
+        if (this.result.email) {
+          return this.result.email;
         } else {
           return "";
         }
@@ -127,7 +164,11 @@ export default {
       try {
         return "Phone: " + this.result.match_person.mobile_number;
       } catch {
-        return "";
+        if (this.result.mobile_number) {
+          return "Phone: " + this.result.mobile_number;
+        } else {
+          return "";
+        }
       }
     },
     phonehref() {

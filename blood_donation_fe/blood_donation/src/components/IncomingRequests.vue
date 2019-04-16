@@ -40,6 +40,7 @@ export default {
   mounted() {
     this.loading = true;
     this.$store.dispatch("getReceivedRequests").then(response => {
+      console.log(response);
       this.searchResults = response;
       this.loading = false;
     });

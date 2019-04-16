@@ -44,6 +44,7 @@ export default {
         this.$store.dispatch("logout").then(response => {
           try {
             M.toast({ html: response.message });
+            this.$router.push("/");
           } catch {}
         });
       } else {

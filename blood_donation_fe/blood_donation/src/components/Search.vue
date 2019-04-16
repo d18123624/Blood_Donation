@@ -8,7 +8,7 @@
         <span class="font-size-large">Search</span>
         <div class="row valign-wrapper zero-padding zero-margin-bottom margin-top-16">
           <div class="input-field col s4 m4 l5">
-            <input id="latitude" type="number" v-model="location.lat" class="active">
+            <input id="latitude" type="number" step="any" v-model="location.lat" class="active">
             <label for="latitude">Latitude</label>
             <span
               v-if="laterror != ''"
@@ -16,12 +16,12 @@
             >{{ laterror }}</span>
           </div>
           <div class="input-field col s4 m4 l5">
-            <input id="longitude" type="number" v-model="location.lng" class="active">
+            <input id="longitude" type="number" step="any" v-model="location.lng" class="active">
             <label for="longitude">Longitude</label>
             <span
-              v-if="lngrror != ''"
+              v-if="lngerror != ''"
               class="left left-align red-text font-size-little"
-            >{{ lngrror }}</span>
+            >{{ lngerror }}</span>
           </div>
           <div class="col s4 m4 l2">
             <a
@@ -43,7 +43,7 @@
               v-model="searchmaxdistancemetres"
               class="active"
             >
-            <label for="searchmaxdistancemetres">Search distance</label>
+            <label for="searchmaxdistancemetres">Search distance (in m)</label>
             <span
               v-if="distanceerror != ''"
               class="left left-align red-text font-size-little"
@@ -77,7 +77,7 @@
     </div>
     <div class="row" v-if="searchResults.length != 0">
       <div class="row center">
-        <span class="font-size-large">Search Results</span>
+        <span class="font-size-large">Search Results ({{ searchCount }} results)</span>
       </div>
       <SearchResult v-for="result in searchResults" :key="result.id" :result="result" where="0"/>
     </div>
@@ -110,7 +110,8 @@ export default {
       laterror: "",
       lngerror: "",
       distanceerror: "",
-      bloodgrouperror: ""
+      bloodgrouperror: "",
+      searchCount: 0
     };
   },
   components: {
@@ -138,7 +139,7 @@ export default {
     search() {
       var error = false;
       if (this.location.lat == "") {
-        this.laterror= "Latitude cannot be empty!"; 
+        this.laterror = "Latitude cannot be empty!";
         error = true;
       }
       if (this.location.lng == "") {
@@ -164,7 +165,19 @@ export default {
         blood_group_patient: this.patientbloodgroup
       };
       this.$store.dispatch("search", payload).then(response => {
-        this.searchResults = response;
+        if (response.error) {
+          this.distanceerror = response.error_message;
+        } else {
+          this.searchResults = response.person_matches;
+          this.searchResults.sort(function(a, b) {
+            return (
+              parseFloat(a.distance_in_metres) -
+              parseFloat(b.distance_in_metres)
+            );
+          });
+          this.searchResults = this.searchResults.slice(0, 10);
+          this.searchCount = response.no_of_matches;
+        }
         this.loading = false;
       });
     }
