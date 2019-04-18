@@ -91,4 +91,30 @@ class PersonModelSerializer(ModelSerializer):
         fields=('username','email','created_at','modified_at','name','age','gender','blood_group','address_lat','address_long','mobile_number','last_blood_donation','currently_eligible_for_donation',)
 
 
+class PersonUpdateSerializer(ModelSerializer):
+    last_blood_donation = serializers.DateField(allow_null=True)
+    currently_eligible_for_donation = serializers.BooleanField(allow_null=False)
+
+    class Meta:
+        model=Person
+        fields=('last_blood_donation','currently_eligible_for_donation',)
+
+    def update(self, instance, validated_data):
+        for key in validated_data:
+            setattr(instance,key,validated_data[key])
+        instance.save()
+        return instance
+
+    def validate(self, attrs):
+        errors = dict()
+        if 'last_blood_donation' in attrs and attrs['last_blood_donation']:
+            if attrs['last_blood_donation'] > datetime.date.today():
+                errors['last_blood_donation'] = 'Last Blood Donation date is in the future!'
+            elif attrs['currently_eligible_for_donation'] and (
+                    datetime.date.today() - attrs['last_blood_donation']).days < 56:
+                errors[
+                    'currently_eligible_for_donation'] = 'You have to wait atleast 56 days from your last date of blood donation...so please set this option to No as of now!'
+        if errors:
+            raise serializers.ValidationError(errors)
+        return attrs
 
