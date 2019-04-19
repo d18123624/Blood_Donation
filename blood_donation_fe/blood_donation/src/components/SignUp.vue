@@ -143,6 +143,7 @@
             </div>
           </div>
           <div v-if="isPickLocationVisible" class="col s12">
+            <GmapAutocomplete @place_changed="setPlace"></GmapAutocomplete>
             <GmapMap :center="center" :zoom="10" style="width: 100%; height: 400px">
               <GmapMarker
                 :position="location"
@@ -186,6 +187,14 @@ export default {
     });
   },
   methods: {
+    setPlace(place) {
+      if (place) {
+        this.location.lat = place.geometry.location.lat();
+        this.location.lng = place.geometry.location.lng();
+        this.center.lat = place.geometry.location.lat();
+        this.center.lng = place.geometry.location.lng();
+      }
+    },
     updatePositions(location) {
       this.location = {
         lat: location.latLng.lat(),

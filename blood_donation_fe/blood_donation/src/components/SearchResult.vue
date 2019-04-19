@@ -9,10 +9,10 @@
         </div>
         <div class="col s10 m10 l11">
           <span v-if="name != ''" class="font-size-large teal-text">{{ name }}</span>
-          <br v-if="age != ''">
+          <br v-if="name != ''">
           <span v-if="age != ''" class="font-size-small">{{ age }}</span>&emsp;
           <span v-if="gender != ''" class="font-size-small">{{ gender }}</span>
-          <br v-if="distance != ''">
+          <br v-if="age != '' && gender != ''">
           <span v-if="where == '0'" class="font-size-small">{{ distance }}</span>
           <br v-if="email == '0'">
           <span v-if="email != ''" class="font-size-small">{{ email }}</span>

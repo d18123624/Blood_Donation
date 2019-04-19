@@ -48,15 +48,19 @@ export default {
   },
   methods: {
     deleteUser() {
-      this.$store.dispatch("deleteAccount").then(response => {
-        M.toast({ html: response.message });
-        if (!response.error) {
-          this.$store.commit("setIsLoggedIn", {
-            loggedin: false,
-            token: null
-          });
-        }
-      });
+      if (
+        confirm("Are you sure you want to delete this account?")
+      ) {
+        this.$store.dispatch("deleteAccount").then(response => {
+          M.toast({ html: response.message });
+          if (!response.error) {
+            this.$store.commit("setIsLoggedIn", {
+              loggedin: false,
+              token: null
+            });
+          }
+        });
+      }
     }
   }
 };

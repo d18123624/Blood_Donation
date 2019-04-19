@@ -1,19 +1,15 @@
 <template>
   <div class="col s12">
     <div class="card padding-16 margin-4">
-      <div class="row zero-margin zero-padding">
-        <div class="col s6 zero-margin zero-padding">
-          <span class="font-size-small">{{ bloodgroup }}</span>
+      <div class="row zero-margin zero-padding valign-wrapper">
+        <div class="col s2 m2 l1 valign-wrapper">
+          <div class="circle teal valign-wrapper left-align">
+            <span class="font-size-large white-text">{{ bloodgroup }}</span>
+          </div>
         </div>
-        <div class="col s6 zero-margin zero-padding">
-          <span class="font-size-small">{{ distance }}</span>
-        </div>
-      </div>
-      <div class="row zero-margin zero-padding">
-        <div class="col s6 zero-margin zero-padding">
-          <span class="font-size-small">{{ latitude }}</span>
-        </div>
-        <div class="col s6 zero-margin zero-padding">
+        <div class="col s10 m10 l11">
+          <span class="font-size-small">{{ distance }}</span><br>
+          <span class="font-size-small">{{ latitude }}</span><br>
           <span class="font-size-small">{{ longitude }}</span>
         </div>
       </div>
@@ -31,7 +27,7 @@ export default {
   props: ["result"],
   computed: {
     bloodgroup() {
-      return "Patient blood group: " + this.result.blood_group_patient;
+      return this.result.blood_group_patient;
     },
     distance() {
       return "Distance (metres): " + this.result.search_max_distance_metres;
@@ -77,5 +73,16 @@ export default {
 .col {
   margin: 0 !important;
   padding: 0 !important;
+}
+
+.circle {
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  text-align: center;
+}
+
+span {
+  width: 100%;
 }
 </style>
