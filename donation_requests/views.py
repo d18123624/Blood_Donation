@@ -43,10 +43,10 @@ class SearchModelViewSet(viewsets.GenericViewSet,mixins.CreateModelMixin):
                 query_filter=Q(blood_group=blood_type)
             else:
                 query_filter=query_filter|Q(blood_group=blood_type)
-                if search_obj.search_person:
-                    exclude_kwargs={'id':search_obj.search_person.id}
-                else:
-                    exclude_kwargs={}
+        if search_obj.search_person:
+            exclude_kwargs={'id':search_obj.search_person.id}
+        else:
+            exclude_kwargs={}
         destination_points_df=pd.DataFrame.from_records(Person.objects.filter(query_filter,currently_eligible_for_donation=True).exclude(**exclude_kwargs).values('id','address_lat','address_long'))
         #destination_points_df
         #criteria_distance=
