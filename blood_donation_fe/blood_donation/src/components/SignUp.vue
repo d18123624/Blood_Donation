@@ -143,7 +143,15 @@
             </div>
           </div>
           <div v-if="isPickLocationVisible" class="col s12">
-            <location-picker v-model="location"/>
+            <GmapMap :center="center" :zoom="10" style="width: 100%; height: 400px">
+              <GmapMarker
+                :position="location"
+                :clickable="true"
+                :draggable="true"
+                @click="center=m.position"
+                @drag="updatePositions"
+              />
+            </GmapMap>
           </div>
         </div>
         <div class="row">
@@ -166,8 +174,6 @@
 
 <script>
 /* eslint-disable */
-import { LocationPicker } from "vue2-location-picker";
-
 export default {
   name: "SignUp",
   mounted() {
@@ -180,6 +186,12 @@ export default {
     });
   },
   methods: {
+    updatePositions(location) {
+      this.location = {
+        lat: location.latLng.lat(),
+        lng: location.latLng.lng()
+      };
+    },
     toggleLocationPickerVisibility() {
       this.isPickLocationVisible = !this.isPickLocationVisible;
       if (this.isPickLocationVisible) {
@@ -293,18 +305,20 @@ export default {
             this.emailerror = response.error_fields.email[0];
           }
           if (response.error_fields.currently_eligible_for_donation) {
-            this.eligiblefordonationerror = response.error_fields.currently_eligible_for_donation[0];
+            this.eligiblefordonationerror =
+              response.error_fields.currently_eligible_for_donation[0];
           }
         }
       });
     }
   },
-  components: {
-    LocationPicker
-  },
   data: function() {
     return {
       location: {
+        lat: 53.35014,
+        lng: -6.266155
+      },
+      center: {
         lat: 53.35014,
         lng: -6.266155
       },
@@ -349,7 +363,7 @@ export default {
 @media only screen and (min-width: 601px) {
   /*tablet*/
   .input-row {
-    width: 50vw;
+    width: 60vw;
   }
 }
 

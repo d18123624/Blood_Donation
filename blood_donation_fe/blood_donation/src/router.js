@@ -5,9 +5,9 @@ const Home = () => import('@/components/Home')
 const SignIn = () => import('@/components/SignIn')
 const SignUp = () => import('@/components/SignUp')
 const Search = () => import('@/components/Search')
-const Location = () => import('@/components/Location')
 const PreviousSearches = () => import('@/components/PreviousSearches')
 const IncomingRequests = () => import('@/components/IncomingRequests')
+const UpdateDetails = () => import('@/components/UpdateDetails')
 
 Vue.use(Router)
 
@@ -18,10 +18,32 @@ const router = new Router({
         {
             path: '/',
             component: Home,
-            name: 'Home',
-            meta: {
-                title: 'Home'
-            }
+            children: [
+                {
+                    path: '/',
+                    component: Search,
+                    name: 'Search',
+                    meta: {
+                        title: 'Search'
+                    }
+                },
+                {
+                    path: '/previoussearches',
+                    component: PreviousSearches,
+                    name: 'PreviousSearches',
+                    meta: {
+                        title: 'Previous searches'
+                    }
+                },
+                {
+                    path: '/incomingrequests',
+                    component: IncomingRequests,
+                    name: 'IncomingRequests',
+                    meta: {
+                        title: 'Incoming requests'
+                    }
+                }
+              ]
         },
         {
             path: '/signup',
@@ -40,35 +62,11 @@ const router = new Router({
             }
         },
         {
-            path: '/search',
-            component: Search,
-            name: 'Search',
+            path: '/updatedetails',
+            component: UpdateDetails,
+            name: 'UpdateDetails',
             meta: {
-                title: 'Search'
-            }
-        },
-        {
-            path: '/previoussearches',
-            component: PreviousSearches,
-            name: 'PreviousSearches',
-            meta: {
-                title: 'Previous searches'
-            }
-        },
-        {
-            path: '/incomingrequests',
-            component: IncomingRequests,
-            name: 'IncomingRequests',
-            meta: {
-                title: 'Incoming requests'
-            }
-        },
-        {
-            path: '/location/:lat/:lon',
-            component: Location,
-            name: 'Location',
-            meta: {
-                title: 'Location'
+                title: 'Update details'
             }
         }
     ],

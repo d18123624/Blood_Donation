@@ -1,84 +1,54 @@
 <template>
-  <div class="container">
-    <div class="row">
-      <div class="rounded-corners-card-panel center padding-16 margin-16 relative">
-        <div v-if="loading" class="progress zero-margin zero-padding preloader-wrapper">
-          <div class="indeterminate"></div>
-        </div>
-        <span class="font-size-large">Search</span>
-        <div class="row valign-wrapper zero-padding zero-margin-bottom margin-top-16">
-          <div class="input-field col s4 m4 l5">
-            <input id="latitude" type="number" step="any" v-model="location.lat" class="active">
-            <label for="latitude">Latitude</label>
-            <span
-              v-if="laterror != ''"
-              class="left left-align red-text font-size-little"
-            >{{ laterror }}</span>
-          </div>
-          <div class="input-field col s4 m4 l5">
-            <input id="longitude" type="number" step="any" v-model="location.lng" class="active">
-            <label for="longitude">Longitude</label>
-            <span
-              v-if="lngerror != ''"
-              class="left left-align red-text font-size-little"
-            >{{ lngerror }}</span>
-          </div>
-          <div class="col s4 m4 l2">
-            <a
-              class="right white-text waves-effect btn-flat teal no-uppercase font-size-small form-btn"
-              v-on:click="toggleLocationPickerVisibility"
-            >{{ locationPickerButtonText }}</a>
-          </div>
-        </div>
-        <div class="row zero-padding zero-margin">
-          <div v-if="isPickLocationVisible" class="col s12">
-            <location-picker v-model="location"/>
-          </div>
-        </div>
-        <div class="row zero-padding zero-margin">
-          <div class="input-field col s6">
-            <input
-              id="searchmaxdistancemetres"
-              type="number"
-              v-model="searchmaxdistancemetres"
-              class="active"
-            >
-            <label for="searchmaxdistancemetres">Search distance (in m)</label>
-            <span
-              v-if="distanceerror != ''"
-              class="left left-align red-text font-size-little"
-            >{{ distanceerror }}</span>
-          </div>
-          <div class="input-field col s6">
-            <select v-model="patientbloodgroup">
-              <option value disabled selected>Choose your blood group</option>
-              <option value="A+">A+</option>
-              <option value="A-">A-</option>
-              <option value="B+">B+</option>
-              <option value="B-">B-</option>
-              <option value="AB+">AB+</option>
-              <option value="AB-">AB-</option>
-              <option value="O+">O+</option>
-              <option value="O-">O-</option>
-            </select>
-            <label>Patient blood group</label>
-            <span
-              v-if="bloodgrouperror != ''"
-              class="left left-align red-text font-size-little"
-            >{{ bloodgrouperror }}</span>
-          </div>
-        </div>
-        <div class="row zero-padding zero-margin">
-          <a v-on:click="search" class="btn-floating btn-large waves-effect waves-light">
-            <i class="material-icons">search</i>
-          </a>
-        </div>
+  <div class="container relative search-component-wrapper">
+    <div v-if="loading" class="progress preloader-wrapper">
+      <div class="indeterminate"></div>
+    </div>
+    <div class="row zero-margin zero-padding">
+      <div class="input-field col s5">
+        <input
+          id="searchmaxdistancemetres"
+          type="number"
+          v-model="searchmaxdistancemetres"
+          class="active"
+        >
+        <label for="searchmaxdistancemetres">Search radius (m)</label>
+        <span
+          v-if="distanceerror != ''"
+          class="left left-align red-text font-size-little"
+        >{{ distanceerror }}</span>
+      </div>
+      <div class="input-field col s5">
+        <select v-model="patientbloodgroup">
+          <option value disabled selected>Choose</option>
+          <option value="A+" selected>A+</option>
+          <option value="A-">A-</option>
+          <option value="B+">B+</option>
+          <option value="B-">B-</option>
+          <option value="AB+">AB+</option>
+          <option value="AB-">AB-</option>
+          <option value="O+">O+</option>
+          <option value="O-">O-</option>
+        </select>
+        <label>Patient blood group</label>
+        <span
+          v-if="bloodgrouperror != ''"
+          class="left left-align red-text font-size-little"
+        >{{ bloodgrouperror }}</span>
+      </div>
+      <div class="col s2 center">
+        <a v-on:click="search" class="btn-floating btn-large waves-effect waves-light">
+          <i class="material-icons">search</i>
+        </a>
       </div>
     </div>
+    <div v-if="isLoadedOneTime" class="row center">
+      <span
+        v-if="searchCount != '0'"
+        class="font-size-large"
+      >Search Results ({{ searchCount }} results)</span>
+      <span v-else class="font-size-large">No results</span>
+    </div>
     <div class="row" v-if="searchResults.length != 0">
-      <div class="row center">
-        <span class="font-size-large">Search Results ({{ searchCount }} results)</span>
-      </div>
       <SearchResult v-for="result in searchResults" :key="result.id" :result="result" where="0"/>
     </div>
   </div>
@@ -86,56 +56,32 @@
 
 <script>
 /* eslint-disable */
-import { LocationPicker } from "vue2-location-picker";
 import SearchResult from "./SearchResult.vue";
+import { setTimeout } from "timers";
 
 export default {
   name: "Search",
-  methods: {},
-  created: function() {
-    M.AutoInit();
-  },
   data() {
     return {
-      location: {
-        lat: 53.35014,
-        lng: -6.266155
-      },
       searchmaxdistancemetres: 6000,
       patientbloodgroup: "",
-      isPickLocationVisible: false,
-      locationPickerButtonText: "Pick",
       loading: false,
       searchResults: [],
-      laterror: "",
-      lngerror: "",
       distanceerror: "",
       bloodgrouperror: "",
-      searchCount: 0
+      searchCount: 0,
+      isLoadedOneTime: false
     };
   },
   components: {
-    LocationPicker,
     SearchResult
   },
   computed: {
-    loginLogoutText() {
-      if (localStorage.getItem("token")) {
-        return "Logout";
-      } else {
-        return "Login";
-      }
+    location() {
+      return this.$store.state.searchMarkers[0].position;
     }
   },
   methods: {
-    toggleLocationPickerVisibility() {
-      this.isPickLocationVisible = !this.isPickLocationVisible;
-      if (this.isPickLocationVisible) {
-        this.locationPickerButtonText = "Hide";
-      } else {
-        this.locationPickerButtonText = "Pick";
-      }
-    },
     search() {
       var error = false;
       if (this.location.lat == "") {
@@ -157,6 +103,8 @@ export default {
       if (error) {
         return;
       }
+      this.distanceerror = "";
+      this.bloodgrouperror = "";
       this.loading = true;
       var payload = {
         search_lat: this.location.lat,
@@ -177,14 +125,68 @@ export default {
           });
           this.searchResults = this.searchResults.slice(0, 10);
           this.searchCount = response.no_of_matches;
+
+          var newPoints = [];
+          newPoints.push({
+            position: {
+              lat: this.location.lat,
+              lng: this.location.lng
+            }
+          });
+          this.searchResults.forEach(function(obj) {
+            var latitude;
+            var longitude;
+            try {
+              longitude = parseFloat(obj.match_person.address_long);
+            } catch {
+              if (obj.longitude) {
+                longitude = parseFloat(obj.longitude);
+              } else {
+                longitude = parseFloat(obj.address_long);
+              }
+            }
+            try {
+              latitude = parseFloat(obj.match_person.address_lat);
+            } catch {
+              if (obj.latitude) {
+                latitude = parseFloat(obj.latitude);
+              } else {
+                latitude = parseFloat(obj.address_lat);
+              }
+            }
+            newPoints.push({
+              position: {
+                lat: latitude,
+                lng: longitude
+              }
+            });
+          });
+          this.$store.commit("setSearchMarkers", { newPoints: newPoints });
         }
         this.loading = false;
+        this.isLoadedOneTime = true;
+        setTimeout(() => {
+          M.AutoInit();
+          M.updateTextFields();
+        }, 100);
       });
     }
   },
   mounted() {
     M.AutoInit();
     M.updateTextFields();
+    var newPoints = [];
+    newPoints.push({
+      position: {
+        lat: 53.35014,
+        lng: -6.266155
+      }
+    });
+    this.$store.commit("setSearchMarkers", { newPoints: newPoints });
+    this.$store.commit("setMapCenter", { mapCenter: {
+      lat: 53.35014,
+        lng: -6.266155
+    }});
   }
 };
 </script>
@@ -211,9 +213,60 @@ export default {
   position: absolute;
   top: 0;
   left: 0;
-  border-top-left-radius: 8px;
-  border-top-right-radius: 8px;
   width: 100%;
+  margin: 0 !important;
+  padding: 0 !important;
   height: 4px;
+}
+
+.container {
+  width: 100%;
+  max-height: 100%;
+  padding-left: 3.5%;
+  padding-right: 3.5%;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+@media only screen and (min-width: 601px) {
+  /*tablet*/
+  .container {
+    width: 100%;
+    max-height: 100%;
+    padding-left: 3.5%;
+    padding-right: 3.5%;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+}
+
+@media only screen and (min-width: 993px) {
+  /*laptop*/
+  .container {
+    width: 100%;
+    max-height: 100%;
+    padding-left: 3.5%;
+    padding-right: 3.5%;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+}
+
+.full-height {
+  height: 100%;
+}
+
+.search-component-wrapper {
+  width: 100%;
+  height: calc(60vh - 32px);
+}
+
+@media only screen and (min-width: 601px) {
+  /*tablet and laptop*/
+  .search-component-wrapper {
+    height: calc(100vh - 64px);
+  }
 }
 </style>

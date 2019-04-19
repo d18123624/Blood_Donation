@@ -7,5 +7,14 @@ export default {
         } else {
             localStorage.removeItem('token');
         }
+    },
+    setSearchMarkers(state, { newPoints }) {
+        state.searchMarkers = newPoints;
+    },
+    setIsIncomingRequestsOpen(state, data) {
+        state.isIncomingRequestsOpen = data;
+    },
+    setMapCenter(state, { mapCenter }) {
+        state.mapCenter = mapCenter;
     }
 }

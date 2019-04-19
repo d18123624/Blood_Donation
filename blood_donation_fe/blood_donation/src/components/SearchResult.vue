@@ -1,51 +1,37 @@
 <template>
   <div class="col s12">
-    <div class="rounded-corners-card-panel padding-16 margin-4">
-      <div v-if="name != ''" class="row zero-margin zero-padding">
-        <span class="font-size-large teal-text">{{ name }}</span>
-      </div>
-      <div class="row zero-margin zero-padding">
-        <div v-if="age != ''" class="col s6 zero-margin zero-padding">
-          <span class="font-size-small">{{ age }}</span>
+    <div class="card padding-16 margin-4">
+      <div class="row zero-margin zero-padding valign-wrapper">
+        <div class="col s2 m2 l1">
+          <div class="circle teal valign-wrapper">
+            <span class="font-size-large white-text">{{ bloodgroup }}</span>
+          </div>
         </div>
-        <div v-if="gender != ''" class="col s6 zero-margin zero-padding">
-          <span class="font-size-small">{{ gender }}</span>
-        </div>
-      </div>
-      <div class="row zero-margin zero-padding">
-        <div class="col s6 zero-margin zero-padding">
-          <span class="font-size-small">{{ bloodgroup }}</span>
-        </div>
-        <div v-if="phonenumber != ''" class="col s6 zero-margin zero-padding">
-          <a :href="phonehref">
-            <span class="font-size-small teal-text">{{ phonenumber }}</span>
-          </a>
+        <div class="col s10 m10 l11">
+          <span v-if="name != ''" class="font-size-large teal-text">{{ name }}</span>
+          <br v-if="age != ''">
+          <span v-if="age != ''" class="font-size-small">{{ age }}</span>&emsp;
+          <span v-if="gender != ''" class="font-size-small">{{ gender }}</span>
+          <br v-if="distance != ''">
+          <span v-if="where == '0'" class="font-size-small">{{ distance }}</span>
+          <br v-if="email == '0'">
+          <span v-if="email != ''" class="font-size-small">{{ email }}</span>
         </div>
       </div>
-      <div class="row zero-margin zero-padding">
-        <div v-if="where == '0'" class="col s6 zero-margin zero-padding">
-          <span class="font-size-small">{{ distance }}</span>
-        </div>
-        <div v-if="email != ''" class="col s6 zero-margin zero-padding">
-          <span class="font-size-small">{{ email }}</span>
-        </div>
-      </div>
-      <div class="row zero-margin zero-padding">
-        <div class="col s6 zero-margin zero-padding">
-          <span class="font-size-small truncate">{{ longitude }}</span>
-        </div>
-        <div class="col s6 zero-margin zero-padding">
-          <span class="font-size-small truncate">{{ latitude }}</span>
-        </div>
-      </div>
-      <div class="row zero-margin zero-padding center">
+      <div
+        v-if="isAuthorizedUserSearching && where == '0'"
+        class="row zero-margin zero-padding center"
+      >
         <a
-          v-if="isAuthorizedUserSearching && where == '0'"
+          v-if="phonenumber != ''"
+          :href="phonehref"
+          class="waves-effect waves-light btn margin-top-16"
+        >Call</a>
+        &emsp;
+        <a
           v-on:click="requestForBloodDonation"
           class="waves-effect waves-light btn margin-top-16"
         >Request Blood Donation</a>
-        &nbsp;
-        <a :href="'/location/' + latitudeVal + '/' + longitudeVal" target="_blank" class="waves-effect waves-light btn margin-top-16">See location on map</a>
       </div>
     </div>
   </div>
@@ -155,9 +141,9 @@ export default {
     },
     bloodgroup() {
       try {
-        return "Bloodgroup: " + this.result.match_person.blood_group;
+        return this.result.match_person.blood_group;
       } catch {
-        return "Bloodgroup: " + this.result.blood_group;
+        return this.result.blood_group;
       }
     },
     phonenumber() {
@@ -220,5 +206,16 @@ export default {
   border-top-right-radius: 8px;
   width: 100%;
   height: 4px;
+}
+
+.circle {
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  text-align: center;
+}
+
+span {
+  width: 100%;
 }
 </style>

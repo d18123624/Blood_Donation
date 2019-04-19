@@ -178,5 +178,55 @@ export default () => ({
       response = []
     })
     return response
+  },
+  async deleteAccount({ state }) {
+    var response = {
+      error: false,
+      message: ""
+    }
+    await Vue.http.delete(
+      state.baseURL + '/person/delete/',
+      {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        emulateJSON: true,
+        headers: {
+          Authorization: 'Token ' + localStorage.getItem('token')
+        }
+      }
+    ).then((result) => {
+      response.error = result.body.error;
+      response.message = result.body.message;
+    }).catch(function (error) {
+      response.error = true;
+      response.message = error.body.detail;
+    })
+    return response
+  },
+  async updateDetails({ state }, payload) {
+    var response = {
+      message: "",
+      error: true,
+      error_fields: []
+    }
+    await Vue.http.post(
+      state.baseURL + '/person/update/',
+      payload,
+      {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        emulateJSON: true,
+        headers: {
+          Authorization: 'Token ' + localStorage.getItem('token')
+        }
+      }
+    ).then((result) => {
+      response.message = result.body.message;
+      response.error = false;
+      response.error_fields = [];
+    }).catch(function (error) {
+      response.message = error.body.message;
+      response.error = true;
+      response.error_fields = error.body.error_fields;
+    })
+    return response
   }
 })

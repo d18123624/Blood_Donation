@@ -1,6 +1,6 @@
 <template>
   <div class="col s12">
-    <div class="rounded-corners-card-panel padding-16 margin-4">
+    <div class="card padding-16 margin-4">
       <div class="row zero-margin zero-padding">
         <div class="col s6 zero-margin zero-padding">
           <span class="font-size-small">{{ bloodgroup }}</span>
@@ -72,5 +72,10 @@ export default {
   border-top-right-radius: 8px;
   width: 100%;
   height: 4px;
+}
+
+.col {
+  margin: 0 !important;
+  padding: 0 !important;
 }
 </style>

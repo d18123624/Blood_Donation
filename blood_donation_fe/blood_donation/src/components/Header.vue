@@ -1,15 +1,19 @@
 <template>
   <div class="navbar-fixed">
     <nav class="white">
-      <div class="nav-wrapper white margin-horizontal-16">
+      <div class="nav-wrapper white">
         <router-link to="/">
           <a class="black-text font-size-huge">Blood donation</a>
         </router-link>
+        <ul class="left">
+          <a href="#" data-target="slide-out" class="sidenav-trigger show-on-large">
+            <i class="material-icons black-text">menu</i>
+          </a>
+        </ul>
+
         <ul class="right">
           <li>
-            <a v-on:click="loginOrLogout" class="black-text">
-              {{ loginLogoutText }}
-            </a>
+            <a v-on:click="loginOrLogout" class="black-text font-size-medium">{{ loginLogoutText }}</a>
           </li>
         </ul>
       </div>
@@ -57,4 +61,7 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+.navbar-fixed {
+  z-index: 500;
+}
 </style>
