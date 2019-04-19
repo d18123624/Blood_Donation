@@ -15,7 +15,7 @@ class PersonCreateSerializer(Serializer):
     name=serializers.CharField(max_length=100,allow_blank=False,allow_null=False)
     age=serializers.IntegerField(max_value=120,min_value=17,allow_null=False)
     gender=serializers.CharField(max_length=1,allow_null=False,allow_blank=False)
-    blood_group=serializers.CharField(max_length=2,allow_null=False,allow_blank=False)
+    blood_group=serializers.CharField(max_length=3,allow_null=False,allow_blank=False)
     address_lat=serializers.DecimalField(max_digits=22,decimal_places=16,allow_null=False,min_value=-90,max_value=90)
     address_long=serializers.DecimalField(max_digits=22,decimal_places=16,allow_null=False,min_value=-180,max_value=180)
     mobile_number=serializers.DecimalField(max_digits=13,decimal_places=0,allow_null=False)
