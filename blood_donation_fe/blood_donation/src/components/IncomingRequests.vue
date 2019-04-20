@@ -66,6 +66,7 @@ export default {
   },
   beforeRouteLeave(to, from, next) {
     next();
+    this.$store.commit("setSearchMarkers", { newPoints: [] });
     this.$store.commit("setIsIncomingRequestsOpen", false);
   }
 };

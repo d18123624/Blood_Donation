@@ -22,7 +22,8 @@ export const store = new Vuex.Store({
         mapCenter: {
             lat: 53.35014,
             lng: -6.266155
-        }    
+        },
+        resetSearch: false   
     },
     mutations,
     actions: actions()

@@ -16,6 +16,8 @@
           <span v-if="where == '0'" class="font-size-small">{{ distance }}</span>
           <br v-if="email == '0'">
           <span v-if="email != ''" class="font-size-small">{{ email }}</span>
+          <br v-if="phonenumber != ''">
+          <span v-if="phonenumber != ''" class="font-size-small">{{ phonenumber }}</span>
         </div>
       </div>
       <div
@@ -25,7 +27,7 @@
         <a
           v-if="phonenumber != ''"
           :href="phonehref"
-          class="waves-effect waves-light btn margin-top-16"
+          class="waves-effect waves-light btn margin-top-16 hide-on-med-and-up"
         >Call</a>
         &emsp;
         <a

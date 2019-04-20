@@ -50,6 +50,10 @@ export default {
       isLoadedOneTime: false
     };
   },
+  beforeRouteLeave(to, from, next) {
+    next();
+    this.$store.commit("setSearchMarkers", { newPoints: [] });
+  },
   components: {
     SearchResult,
     PreviousSearch

@@ -1,5 +1,6 @@
 <template>
   <div class="container relative search-component-wrapper">
+    <div style="display:none;">{{reset}}</div>
     <div v-if="loading" class="progress preloader-wrapper">
       <div class="indeterminate"></div>
     </div>
@@ -76,9 +77,24 @@ export default {
   components: {
     SearchResult
   },
+  beforeRouteLeave(to, from, next) {
+    next();
+    this.$store.commit("setSearchMarkers", { newPoints: [] });
+  },
   computed: {
     location() {
       return this.$store.state.searchMarkers[0].position;
+    },
+    reset() {
+      this.searchmaxdistancemetres = 6000;
+      this.patientbloodgroup = "";
+      this.loading = false;
+      this.searchResults = [];
+      this.distanceerror = "";
+      this.bloodgrouperror = "";
+      this.searchCount = 0;
+      this.isLoadedOneTime = false;
+      return this.$store.state.resetSearch;
     }
   },
   methods: {
@@ -183,10 +199,12 @@ export default {
       }
     });
     this.$store.commit("setSearchMarkers", { newPoints: newPoints });
-    this.$store.commit("setMapCenter", { mapCenter: {
-      lat: 53.35014,
+    this.$store.commit("setMapCenter", {
+      mapCenter: {
+        lat: 53.35014,
         lng: -6.266155
-    }});
+      }
+    });
   }
 };
 </script>

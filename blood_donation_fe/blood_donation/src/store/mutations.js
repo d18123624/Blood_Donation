@@ -16,5 +16,8 @@ export default {
     },
     setMapCenter(state, { mapCenter }) {
         state.mapCenter = mapCenter;
+    },
+    setReset(state) {
+        state.resetSearch=!state.resetSearch;
     }
 }

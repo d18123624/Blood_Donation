@@ -83,9 +83,15 @@ export default () => ({
         token: null
       })
     }).catch(function (error) {
-      response.message = "Error!";
+      response.message = "Already logged out!";
       response.error = true;
+      commit("setIsLoggedIn", {
+        loggedin: false,
+        token: null
+      })
     })
+    commit("setReset")
+    commit("setSearchMarkers", { newPoints: [] });
     return response
   },
   async search({ state }, payload) {
