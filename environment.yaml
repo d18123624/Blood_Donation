@@ -50,5 +50,5 @@ dependencies:
   - zlib=1.2.11=h7b6447c_3
   - pip:
     - django-cors-headers==2.5.2
-prefix: /home/rwikdutta/anaconda3/envs/env_blood_donor
+prefix: /home/sohinidas/anaconda3/envs/env_blood_donor
 
