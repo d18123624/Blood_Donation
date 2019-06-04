@@ -1,4 +1,4 @@
-# Assignment
+# Blood_Donation
 
 ## Steps to setup the backend:
 - cd into the folder containing the backend source code
